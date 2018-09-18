@@ -14,7 +14,7 @@ The following application parts are mandatory to allow an app to start in Kiosk 
  * a class extending android.app.admin.DeviceAdminReceiver, see DeviceOwnerReceiver
  * an xml describing the policy components; see /app/src/main/res/xml/device_owner_receiver.xml
  * an entry for the receiver in the AndroidManifest class, as follows::
-    <receiver
+    ``<receiver
         android:name=".DeviceOwnerReceiver"
         android:description="@string/app_name"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@ The following application parts are mandatory to allow an app to start in Kiosk 
             <action android:name="android.app.action.PROFILE_OWNER_CHANGED"/>
             <action android:name="android.app.action.DEVICE_OWNER_CHANGED"/>
         </intent-filter>
-    </receiver>
+    </receiver>``
  * The following code in the MainActivity:
     private void checkStartKioskMode() {
         DevicePolicyManager manager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
