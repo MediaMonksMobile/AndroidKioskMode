@@ -1,0 +1,124 @@
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        def classpaths = rootProject.ext.ClassPaths
+
+        classpath classpaths.hugo
+        classpath classpaths.kotlin
+    }
+}
+
+def config = rootProject.ext
+def plugins = config.Plugins
+def libs = config.Libraries
+
+apply plugin: plugins.android_app
+apply plugin: plugins.kotlin
+apply plugin: plugins.hugo
+
+android {
+    def versions = config.Versions
+    def appConfig = config.AppConfig
+
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+
+        applicationId appConfig.id
+        versionCode appConfig.versionCode
+        versionName appConfig.versionName
+
+        testInstrumentationRunner libs.test_runner
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix appConfig.debugSuffix
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile libs.kotlin
+
+    // testing
+    androidTestImplementation(libs.test_espresso, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testImplementation libs.test_junit
+
+    // Android Support
+    implementation libs.support_appCompat
+    implementation libs.support_design
+    implementation libs.support_constraintLayout
+
+    // Rx
+    implementation libs.rxAndroid
+
+    // Play Services
+
+    // Butterknife
+    implementation libs.butterknife
+    annotationProcessor libs.annotationProcessorButterknife
+
+    // Pixplicity Prefs
+    implementation libs.easyPrefs
+
+    // GSon
+    implementation libs.gson
+
+    // Retrofit
+    implementation libs.retrofit
+    implementation libs.retrofit_gsonConverter
+    implementation libs.retrofit_rxAdapter
+
+    implementation libs.timber
+
+    // Glide
+    implementation libs.glide
+    annotationProcessor libs.annotationProcessorGlide
+
+    // Dagger
+    implementation libs.dagger
+    annotationProcessor libs.annotationProcessorDagger
+
+    // OkHttp
+    implementation libs.okHttp
+    implementation libs.okHttp_loggingInterceptor
+
+    // AutoValue
+    compileOnly libs.autoValue
+    annotationProcessor libs.autoValue
+
+    // AutoValue Gson
+    compileOnly libs.autoValue_gson
+    annotationProcessor libs.autoValue_gson
+
+    // Stetho
+    implementation libs.stetho
+}
+repositories {
+    mavenCentral()
+}
